@@ -8,14 +8,20 @@
 	rel="stylesheet"
 	integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
 	crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="src/main/resources/static">
 <title>Cursos</title>
 </head>
 
 <body>
+	<div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+		<div class="wave"></div>
+	</div>
 	<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark "
 		data-bs-theme="dark">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Cursos</a>
+			<a class="navbar-brand" th:href="@{/}">Cursos</a>
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
 				aria-controls="navbarNavAltMarkup" aria-expanded="false"
@@ -24,9 +30,9 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-link active" aria-current="page" href="#">Inscripciones</a>
-					<a class="nav-link active" href="#">Estudiantes</a> <a
-						class="nav-link active" href="#">Pricing</a>
+					<a class="nav-link active" aria-current="page"
+						th:href="@{/inscripcion}">Inscripciones</a> <a
+						class="nav-link active" th:href="@{/estudiante}">Estudiantes</a>
 				</div>
 			</div>
 		</div>
@@ -34,6 +40,14 @@
 	<br>
 	<br>
 	<style>
+	body {
+	background-color: #e5e5f7;
+	background-image: radial-gradient(#444cf7 0.2px, transparent 0.2px),
+		radial-gradient(#444cf7 0.2px, #e5e5f7 0.2px);
+	background-size: 8px 8px;
+	background-position: 0 0, 4px 4px;
+}
+
 .table-responsive {
 	width: 80%;
 	margin: 0 auto; /* Centro la tabla horizontalmente */
@@ -44,36 +58,103 @@
 }
 
 .table thead th {
-background-color: #343a40;
+	background-color: #343a40;
 	color: white !important;
 	/* Texto blanco y !important para forzar la prioridad */
 }
 </style>
+		<div th:if="${si}">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="thead-dark text-white">
+						<tr>
+							<th scope="col">Nombre</th>
+							<th scope="col">Duracion</th>
+							<th scope="col">Precio</th>
+							<th scope="col">Disponibilidad</th>
+							<th scope="col">Plazas</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row" th:text="${resultado.nombre}"></th>
+							<td th:text="${resultado.duracion}"></td>
+							<td th:text="${resultado.precio}"></td>
+							<td th:text="${resultado.disponibilidad}"
+								th:style="'background-color: ' + (${resultado.disponibilidad == 'si' ? '#89FF93' : '#FF7979'})"></td>
+							<td th:text="${resultado.plazas}"
+								th:style="'background-color: ' + (${resultado.plazas > 0 ? '#89FF93' : '#FF7979'})"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div th:unless="${si}">
+			<div class="table-responsive">
+				<div
+					class="container-fluid d-flex justify-content-between align-items-center mt-2 mb-2">
+					<div class="d-flex">
+						<a class="btn btn-secondary me-2" aria-current="page"
+							th:href="@{curso/form}">Nuevo Curso</a> <a
+							class="btn btn-secondary" aria-current="page"
+							th:href="@{/disponibles}">Mostrar solo Disponibles</a>
+					</div>
 
-	<div class="table-responsive">
-		<table class="table table-hover table-bordered">
-			<thead class="thead-dark text-white">
-				<tr>
-					<th scope="col">Nombre</th>
-					<th scope="col">Duración</th>
-					<th scope="col">Precio</th>
-					<th scope="col">Disponibilidad</th>
-					<th scope="col">Plazas</th>
-				</tr>
-			</thead>
-			<tbody th:each="cursoDto : ${listaCursos}">
-				<tr>
-					<th scope="row" th:text="${cursoDto.nombre}"></th>
-					<td th:text="${cursoDto.duracion}"></td>
-					<td th:text="${cursoDto.precio}"></td>
-					<td th:text="${cursoDto.disponibilidad}"
-						th:style="'background-color: ' + (${cursoDto.disponibilidad == 'si' ? '#89FF93' : '#FF7979'})"></td>
-					<td th:text="${cursoDto.plazas}"
-						th:style="'background-color: ' + (${cursoDto.plazas > 0 ? '#89FF93' : '#FF7979'})"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+					<form class="d-flex" role="search">
+						<input class="form-control me-2" type="search"
+							placeholder="Search" aria-label="Search" name="search">
+						<button class="btn btn-success" type="submit">Buscar</button>
+					</form>
+				</div>
+				<table class="table table-hover table-bordered"
+					th:if="${mostrarTodos}">
+					<thead class="thead-dark text-white">
+						<tr>
+							<th scope="col">Nombre</th>
+							<th scope="col">Duración</th>
+							<th scope="col">Precio</th>
+							<th scope="col">Disponibilidad</th>
+							<th scope="col">Plazas</th>
+						</tr>
+					</thead>
+					<tbody th:each="cursoDto : ${listaCursos}">
+						<tr>
+							<th scope="row" th:text="${cursoDto.nombre}"></th>
+							<td th:text="${cursoDto.duracion}"></td>
+							<td th:text="${cursoDto.precio}"></td>
+							<td th:text="${cursoDto.disponibilidad}"
+								th:style="'background-color: ' + (${cursoDto.disponibilidad == 'si' ? '#89FF93' : '#FF7979'})"></td>
+							<td th:text="${cursoDto.plazas}"
+								th:style="'background-color: ' + (${cursoDto.plazas > 0 ? '#89FF93' : '#FF7979'})"></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table table-hover table-bordered"
+					th:if="${not mostrarTodos}">
+					<thead class="thead-dark text-white">
+						<tr>
+							<th scope="col">Nombre</th>
+							<th scope="col">Duración</th>
+							<th scope="col">Precio</th>
+							<th scope="col">Disponibilidad</th>
+							<th scope="col">Plazas</th>
+						</tr>
+					</thead>
+					<tbody th:each="cursoDto : ${listaCursos}">
+						<tr>
+							<th scope="row" th:text="${cursoDto.nombre}"></th>
+							<td th:text="${cursoDto.duracion}"></td>
+							<td th:text="${cursoDto.precio}"></td>
+							<td th:text="${cursoDto.disponibilidad}"
+								th:style="'background-color: ' + (${cursoDto.disponibilidad == 'si' ? '#89FF93' : '#FF7979'})"></td>
+							<td th:text="${cursoDto.plazas}"
+								th:style="'background-color: ' + (${cursoDto.plazas > 0 ? '#89FF93' : '#FF7979'})"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
 </body>
 
 </html>

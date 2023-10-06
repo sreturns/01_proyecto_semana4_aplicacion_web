@@ -19,14 +19,12 @@ public class CursoServiceImpl implements CursoService {
 
 	@Override
 	public CursoDto getByName(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+		return template.getForObject(URL_CONNECTION + "/" + nombre, CursoDto.class);
 	}
 
 	@Override
 	public List<CursoDto> getIfAvailable() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(template.getForObject(URL_CONNECTION + "?avaiables=true", CursoDto[].class));
 	}
 
 	@Override
@@ -48,8 +46,9 @@ public class CursoServiceImpl implements CursoService {
 
 	@Override
 	public List<CursoDto> save(CursoDto curso) {
-		// TODO Auto-generated method stub
-		return null;
+		template.postForLocation(URL_CONNECTION, curso);
+
+		return getAll();
 	}
 
 	@Override

@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.sinensia.dto.CursoDto;
 
+/**
+ * 
+ *@see com.sinensia.service.CursoServiceImpl
+ */
 public interface CursoService {
 
 	CursoDto getByName(String nombre);

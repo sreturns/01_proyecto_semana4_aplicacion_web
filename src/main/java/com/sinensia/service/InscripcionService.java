@@ -4,6 +4,10 @@ import java.util.List;
 
 import com.sinensia.dto.InscripcionDto;
 
+/**
+ * 
+ *@see com.sinensia.service.InscripcionServiceImpl
+ */
 public interface InscripcionService {
 
     List<InscripcionDto> getAll();
